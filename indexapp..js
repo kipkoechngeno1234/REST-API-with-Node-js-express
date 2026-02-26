@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
     res.send('The wolrd is a better place with REST-API, NodeJS + ExpressJS');
 }); 
 
+
   //POST HTTP Method
 app.post('/api/courses', (req, res) => {
   const course = {
