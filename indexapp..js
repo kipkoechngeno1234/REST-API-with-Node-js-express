@@ -9,11 +9,19 @@ const courses = [
   { id: 3, name: 'Backend Development' }
 ];
 
-  // GET HTTP Method 
-app.get('/', (req, res) => {
-    res.send('The wolrd is a better place with REST-API, NodeJS + ExpressJS');
-}); 
+  // GET HTTP Method to return all courses
+app.get('/api/courses', (req, res) => {
+  res.send(courses);
+});
 
+   // GET HTTP Method with ID
+app.get('/api/courses/:id', (req, res) => {
+  const course = courses.find(c => c.id === parseInt(req.params.id));
+
+  // Return 404 if the course with the given ID was not found(object not found).
+  if (!course) res.status(404).send('The course with the given ID was not found.');
+  res.send(course);
+});
 
   //POST HTTP Method
 app.post('/api/courses', (req, res) => {
