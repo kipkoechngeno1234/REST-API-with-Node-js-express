@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+
 //HTPP Method
 
 const courses = [
@@ -23,12 +24,14 @@ app.get('/api/courses/:id', (req, res) => {
   res.send(course);
 });
 
-  //POST HTTP Method
+  //HTTP POST Method
 app.post('/api/courses', (req, res) => {
   const course = {
     id: courses.length + 1,
     name: req.body.name
   };
+    // Add the new course to the courses array and return the newly created course to the client.
   courses.push(course);
+    // Return the newly created course to the client.
   res.send(course);
 }); 

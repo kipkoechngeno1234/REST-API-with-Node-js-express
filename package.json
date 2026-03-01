@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^5.2.1",
+    "joi": "^18.0.2",
     "node": "^25.7.0"
   }
 }
