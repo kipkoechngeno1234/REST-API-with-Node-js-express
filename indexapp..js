@@ -1,6 +1,10 @@
+  // Import the Joi module for input validation and Use the express.json() middleware to parse incoming JSON requests and make the data available in req.body.
+const Joi = require('joi');
+  // Import the Express module and create an instance of the Express application.
 const express = require('express');
+ // Create an instance of the Express application.
 const app = express();
-
+ 
 
 //HTPP Method
 
@@ -12,6 +16,12 @@ const courses = [
 
   // GET HTTP Method to return all courses
 app.get('/api/courses', (req, res) => {
+  // Define a Joi schema to validate the input data for creating a new course. The schema specifies that the name property must be a string with a minimum length of 3 characters and is required.
+  const schema = {
+    name: Joi.string().min(3).required()
+  };
+   // Validate the incoming request data against the defined schema using Joi.validate(). If the validation fails, an error object will be returned, which can be used to send an appropriate response to the client.
+  const result = Joi.validate(req.body, schema);
   res.send(courses);
 });
 
