@@ -54,4 +54,11 @@ app.post('/api/courses', (req, res) => {
   res.send(course);
 }); 
 
+  //Handling HTTP PUT Requests
+app.put('/api/courses/:id', (req, res) => {
+  // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
+const course = courses.find(c => c.find === parseInt(req.params.id));
+});
+
 const port = process.env.PORT || 3000;
+const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
