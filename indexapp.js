@@ -24,7 +24,6 @@ app.get('/api/courses', (req, res) => {
 app.get('/api/courses/:id', (req, res) => {
    // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
-
   if (!course) res.status(404).send('The course with the given ID was not found.');
   res.send(course);
 });
@@ -33,15 +32,13 @@ app.get('/api/courses/:id', (req, res) => {
 
   //HTTP POST Method
 app.post('/api/courses', (req, res) => {
-  // Define a Joi schema to validate the input data for creating a new course. The schema specifies that the name property must be a string with a minimum length of 3 characters and is required.
-  const schema = {
-    name: Joi.string().min(3).required()
-  };
+  
    // Validate the incoming request data against the defined schema using Joi.validate(). If the validation fails, an error object will be returned, which can be used to send an appropriate response to the client.
-  const result = Joi.validate(req.body, schema);
+  const result = validateCourse(req.body);
   // Return 400 if the course with the given ID was not found(object not found).
   if (result.error) { res.status(400).send(result.error.details[0].message);
   res.send(course);
+  return;
 }
 
   const course = {
@@ -57,8 +54,29 @@ app.post('/api/courses', (req, res) => {
   //Handling HTTP PUT Requests
 app.put('/api/courses/:id', (req, res) => {
   // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
-const course = courses.find(c => c.find === parseInt(req.params.id));
+  const course = courses.find(c => c.id === parseInt(req.params.id));
+   // Return 404 if the course with the given ID was not found(object not found).
+  if (!course) res.status(404).send('The course with the given ID was not found.');
+  
+ const result = validateCourse(req.body);
+  // Return 400 if the course with the given ID was not found(object not found).
+  if (result.error) { res.status(400).send(result.error.details[0].message);
+  return;
+}
+  // Update the name property of the course object with the new value provided in the request body and return the updated course to the client.
+courses.name = req.body.name;
+res.send(course);
 });
+
+  //function to validate the input data for creating a new course using Joi schema validation. It takes a course object as an argument and validates it against the defined schema, returning the result of the validation.
+function validateCourse(course) {
+  // Define a Joi schema to validate the input data for creating a new course.
+  const schema = {
+    name: Joi.string().min(3).required()
+  };
+  // Validate the incoming request data against the defined schema.
+  return Joi.validate(course, schema);
+}
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
