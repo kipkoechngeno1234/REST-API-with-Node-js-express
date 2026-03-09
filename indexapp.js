@@ -32,12 +32,12 @@ app.get('/api/courses/:id', (req, res) => {
 
   //HTTP POST Method
 app.post('/api/courses', (req, res) => {
-  
-   // Validate the incoming request data against the defined schema using Joi.validate(). If the validation fails, an error object will be returned, which can be used to send an appropriate response to the client.
-  const result = validateCourse(req.body);
+
+   // Validate the incoming request data against the defined schema.
+  const { error} = validateCourse(req.body);
   // Return 400 if the course with the given ID was not found(object not found).
-  if (result.error) { res.status(400).send(result.error.details[0].message);
-  res.send(course);
+if (error) { 
+    res.status(400).send(error.details[0].message);
   return;
 }
 
@@ -58,9 +58,10 @@ app.put('/api/courses/:id', (req, res) => {
    // Return 404 if the course with the given ID was not found(object not found).
   if (!course) res.status(404).send('The course with the given ID was not found.');
   
- const result = validateCourse(req.body);
+ const { error} = validateCourse(req.body);
   // Return 400 if the course with the given ID was not found(object not found).
-  if (result.error) { res.status(400).send(result.error.details[0].message);
+  if (error) { 
+    res.status(400).send(error.details[0].message);
   return;
 }
   // Update the name property of the course object with the new value provided in the request body and return the updated course to the client.
