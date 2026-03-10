@@ -24,7 +24,7 @@ app.get('/api/courses', (req, res) => {
 app.get('/api/courses/:id', (req, res) => {
    // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send('The course with the given ID was not found.');
+  if (!course) return res.status(404).send('The course with the given ID was not found.');
   res.send(course);
 });
 
@@ -36,10 +36,7 @@ app.post('/api/courses', (req, res) => {
   // Validate the incoming request data against the defined schema using the validateCourse function. If the validation fails, it will return an error object containing details about the validation failure.
  const { error} = validateCourse(req.body);
   // Return 400 if the course with the given ID was not found(object not found).
-  if (error) { 
-    res.status(400).send(error.details[0].message);
-  return;
-}
+  if (error) return res.status(400).send(error.details[0].message);
 
   const course = {
     id: courses.length + 1,
@@ -56,14 +53,12 @@ app.put('/api/courses/:id', (req, res) => {
   // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
    // Return 404 if the course with the given ID was not found(object not found).
-  if (!course) res.status(404).send('The course with the given ID was not found.');
+  if (!course) return res.status(404).send('The course with the given ID was not found.');
   
  const { error} = validateCourse(req.body);
   // Return 400 if the course with the given ID was not found(object not found).
-  if (error) { 
-    res.status(400).send(error.details[0].message);
-  return;
-}
+  if (error) return res.status(400).send(error.details[0].message);
+  
   // Update the name property of the course object with the new value provided in the request body and return the updated course to the client.
 courses.name = req.body.name;
 res.send(course);
@@ -75,7 +70,7 @@ app.delete('/api/courses/:id', (req, res) => {
     // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
    // Return 404 if the course with the given ID was not found(object not found).
-  if (!course) res.status(404).send('The course with the given ID was not found.');
+  if (!course) return res.status(404).send('The course with the given ID was not found.');
      
   // Remove the course from the courses array using the splice() method. The index of the course to be removed is determined by finding the index of the course in the array using the indexOf() method.
   const index = courses.indexOf(course);
