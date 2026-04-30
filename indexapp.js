@@ -33,7 +33,7 @@ app.get('/api/courses/:id', (req, res) => {
   //HTTP POST Method
 app.post('/api/courses', (req, res) => {
 
-  // Validate the incoming request data against the defined schema using the validateCourse function. If the validation fails, it will return an error object containing details about the validation failure.
+  // Validate the incoming request data against the defined schema using the validateCourse function. 
  const { error} = validateCourse(req.body);
   // Return 400 if the course with the given ID was not found(object not found).
   if (error) return res.status(400).send(error.details[0].message);
@@ -42,7 +42,7 @@ app.post('/api/courses', (req, res) => {
     id: courses.length + 1,
     name: req.body.name
   };
-    // Add the new course to the courses array and return the newly created course to the client.
+    // Add the new course to the courses array.
   courses.push(course);
     // Return the newly created course to the client.
   res.send(course);
@@ -50,26 +50,22 @@ app.post('/api/courses', (req, res) => {
 
   //Handling HTTP PUT Requests
 app.put('/api/courses/:id', (req, res) => {
-  // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
-   // Return 404 if the course with the given ID was not found(object not found).
   if (!course) return res.status(404).send('The course with the given ID was not found.');
   
  const { error} = validateCourse(req.body);
-  // Return 400 if the course with the given ID was not found(object not found).
   if (error) return res.status(400).send(error.details[0].message);
   
   // Update the name property of the course object with the new value provided in the request body and return the updated course to the client.
-courses.name = req.body.name;
+course.name = req.body.name;
 res.send(course);
 });
-
+ 
 
 
 app.delete('/api/courses/:id', (req, res) => {
     // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
-   // Return 404 if the course with the given ID was not found(object not found).
   if (!course) return res.status(404).send('The course with the given ID was not found.');
      
   // Remove the course from the courses array using the splice() method. The index of the course to be removed is determined by finding the index of the course in the array using the indexOf() method.
@@ -86,12 +82,12 @@ app.delete('/api/courses/:id', (req, res) => {
   //function to validate the input data for creating a new course using Joi schema validation. It takes a course object as an argument and validates it against the defined schema, returning the result of the validation.
 function validateCourse(course) {
   // Define a Joi schema to validate the input data for creating a new course.
-  const schema = {
+  const schema = Joi.object({
     name: Joi.string().min(3).required()
-  };
+  });
   // Validate the incoming request data against the defined schema.
-  return Joi.validate(course, schema);
-}
+  return schema.validate(course);
+} 
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
