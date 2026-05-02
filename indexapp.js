@@ -25,7 +25,7 @@ app.get('/api/courses/:id', (req, res) => {
    // Find the course with the given ID in the courses array using the find() method. If a course with the specified ID is found, it will be returned; otherwise, undefined will be returned.
   const course = courses.find(c => c.id === parseInt(req.params.id));
   if (!course) return res.status(404).send('The course with the given ID was not found.');
-  res.send(course);
+  res.json(course);
 });
 
 
